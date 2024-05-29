@@ -9,6 +9,7 @@ def initialize_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
+            email TEXT NOT NULL,
             role TEXT NOT NULL DEFAULT 'user'
         )
     ''')
@@ -20,19 +21,7 @@ def initialize_database():
             author TEXT,
             genre TEXT,
             published_date TEXT,
-            file_path TEXT
-        )
-    ''')
-
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS borrowed_books (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            book_id INTEGER,
-            borrow_date TEXT,
-            return_date TEXT,
-            FOREIGN KEY (user_id) REFERENCES users (id),
-            FOREIGN KEY (book_id) REFERENCES books (id)
+            s3_key TEXT
         )
     ''')
 
@@ -40,9 +29,9 @@ def initialize_database():
         CREATE TABLE IF NOT EXISTS password_reset_tokens (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            token TEXT NOT NULL,
-            expiration_date DATETIME NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users (id)
+            token TEXT,
+            expiration_date DATETIME,
+            FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
 
