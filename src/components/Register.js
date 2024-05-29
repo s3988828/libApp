@@ -6,16 +6,19 @@ import './Register.css';
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/register', { username, password });
+            const response = await api.post('/register', { username, password, email });
             setMessage(response.data.message);
         } catch (error) {
             if (error.response && error.response.data) {
                 setMessage(error.response.data.message);
+            } else if (error.request) {
+                setMessage('No response from server. Please try again later.');
             } else {
                 setMessage('An error occurred. Please try again.');
             }
@@ -39,6 +42,14 @@ const Register = () => {
                     placeholder: 'Password',
                     value: password,
                     onChange: (e) => setPassword(e.target.value),
+                    required: true,
+                    className: 'register-input'
+                }),
+                React.createElement('input', {
+                    type: 'email',
+                    placeholder: 'Email',
+                    value: email,
+                    onChange: (e) => setEmail(e.target.value),
                     required: true,
                     className: 'register-input'
                 }),
