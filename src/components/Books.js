@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../api'; 
 import './Books.css';
+ // Ensure this API setup is correct as shown in the previous message
 
 const Books = ({ token }) => {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
+    const fetchBooks = () => {
+      axios.get('/books', {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { q: search }
+      })
+      .then(response => {
+        setBooks(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the books!', error);
+      });
+    };
     fetchBooks();
   }, [token, search]);
-
-  const fetchBooks = () => {
-    axios.get('http://127.0.0.1:5000/books', {
-      headers: { Authorization: `Bearer ${token}` },
-      params: { q: search }
-    })
-    .then(response => {
-      setBooks(response.data);
-    })
-    .catch(error => {
-      console.error('There was an error fetching the books!', error);
-    });
-  };
 
   return (
     <div className="books-container">
@@ -41,7 +41,7 @@ const Books = ({ token }) => {
             <div>{book.genre}</div>
             <div>{book.published_date}</div>
             <a
-              href={`http://127.0.0.1:5000/books/${book.id}/download`}
+              href={book.url}  // Updated to use the direct link from the API
               target="_blank"
               rel="noopener noreferrer"
               className="download-link"
