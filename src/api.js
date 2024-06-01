@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:5000', //  Flask server's address
+    baseURL: 'https://ec2-3-27-159-85.ap-southeast-2.compute.amazonaws.com',
 });
 
 export default api;
