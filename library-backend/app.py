@@ -134,11 +134,35 @@ def get_books():
     query = request.args.get('q', '')
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT id, title, author, genre, published_date FROM books WHERE title LIKE ? OR author LIKE ? OR genre LIKE ?', 
+    cursor.execute('SELECT id, title, author, genre, published_date, url FROM books WHERE title LIKE ? OR author LIKE ? OR genre LIKE ?', 
                    (f'%{query}%', f'%{query}%', f'%{query}%'))
     books = cursor.fetchall()
     conn.close()
     return jsonify([dict(book) for book in books])
+
+
+@app.route('/api/books', methods=['POST'])
+@jwt_required()
+def upload_book():
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return jsonify({'message': 'Only admins can upload books'}), 403
+
+    file = request.files['file']
+    metadata = request.form
+
+    s3_key = f"books/{uuid.uuid4()}/{file.filename}"
+    s3_client.upload_fileobj(file, 'your-bucket-name', s3_key)
+    url = s3_client.generate_presigned_url('get_object', Params={'Bucket': 'your-bucket-name', 'Key': s3_key}, ExpiresIn=3600)
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO books (title, author, genre, published_date, url) VALUES (?, ?, ?, ?, ?)',
+                   (metadata['title'], metadata['author'], metadata['genre'], metadata['published_date'], url))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': 'Book uploaded successfully'}), 201    
 
 
 

@@ -3,7 +3,7 @@ import api from '../api';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
-const Login = ({ setToken }) => {
+const Login = ({ setToken, setUserRole }) => {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -13,8 +13,11 @@ const Login = ({ setToken }) => {
         try {
             const response = await api.post('/api/login', { identifier, password });
             const token = response.data.access_token;
-            localStorage.setItem('token', token);  // Store token in local storage
+            const userRole = response.data.user_role; // Assuming the backend sends the user role in the response
+            localStorage.setItem('token', token);
+            localStorage.setItem('userRole', userRole);
             setToken(token);
+            setUserRole(userRole);
             setMessage('Login successful');
         } catch (error) {
             if (error.response && error.response.data) {

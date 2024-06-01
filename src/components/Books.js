@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../api'; 
+import axios from '../api';
 import './Books.css';
- // Ensure this API setup is correct as shown in the previous message
 
 const Books = ({ token }) => {
   const [books, setBooks] = useState([]);
@@ -36,12 +35,12 @@ const Books = ({ token }) => {
       <ul className="books-list">
         {books.map(book => (
           <li key={book.id} className="book-item">
-            <div>{book.title}</div>
-            <div>{book.author}</div>
-            <div>{book.genre}</div>
-            <div>{book.published_date}</div>
+            <div className="book-title">{book.title}</div>
+            <div className="book-author">{book.author}</div>
+            <div className="book-genre">{book.genre}</div>
+            <div className="book-published-date">{book.published_date}</div>
             <a
-              href={book.url}  // Updated to use the direct link from the API
+              href={book.url}
               target="_blank"
               rel="noopener noreferrer"
               className="download-link"

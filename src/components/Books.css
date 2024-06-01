@@ -2,58 +2,49 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-}
-
-.books-container h1 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.search-input {
+  }
+  
+  .search-input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 10px;
     margin-bottom: 20px;
-    box-sizing: border-box;
-    border: 2px solid #ddd;
-    border-radius: 4px;
     font-size: 16px;
-    color: #333;
-}
-
-.books-list {
+  }
+  
+  .books-list {
     list-style: none;
     padding: 0;
-}
-
-.book-item {
-    background-color: #fff;
-    padding: 15px;
+  }
+  
+  .book-item {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .book-title {
+    font-size: 20px;
+    font-weight: bold;
     margin-bottom: 10px;
-    border-radius: 4px;
-    border-left: 5px solid #007bff;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-}
-
-.book-item div {
+  }
+  
+  .book-author,
+  .book-genre,
+  .book-published-date {
     margin-bottom: 5px;
-    line-height: 1.5;
-}
-
-.book-item .download-link {
+  }
+  
+  .download-link {
     display: inline-block;
-    padding: 8px 12px;
     background-color: #007bff;
-    color: #ffffff;
+    color: #fff;
+    padding: 10px 20px;
     text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.book-item .download-link:hover {
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .download-link:hover {
     background-color: #0056b3;
-}
+  }

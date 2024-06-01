@@ -21,7 +21,7 @@ def initialize_database():
             author TEXT,
             genre TEXT,
             published_date TEXT,
-            s3_key TEXT
+            url TEXT
         )
     ''')
 

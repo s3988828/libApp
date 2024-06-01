@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-ro
 import Register from './components/Register';
 import Login from './components/Login';
 import Books from './components/Books';
+import UploadBook from './components/UploadBook';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import ForgotPassword from './components/ForgotPassword';
@@ -11,6 +12,7 @@ import './App.css';
 
 function App() {
     const [token, setToken] = useState(localStorage.getItem('token') || '');
+    const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || '');
 
     useEffect(() => {
         if (token) {
@@ -20,8 +22,17 @@ function App() {
         }
     }, [token]);
 
+    useEffect(() => {
+        if (userRole) {
+            localStorage.setItem('userRole', userRole);
+        } else {
+            localStorage.removeItem('userRole');
+        }
+    }, [userRole]);
+
     const handleLogout = () => {
         setToken('');
+        setUserRole('');
     };
 
     return (
@@ -35,6 +46,7 @@ function App() {
                         {token ? (
                             <>
                                 <li><Link to="/books">Books</Link></li>
+                                {userRole === 'admin' && <li><Link to="/upload">Upload Book</Link></li>}
                                 <li><Link to="/profile">Profile</Link></li>
                                 <li><a href="/" onClick={handleLogout}>Logout</a></li>
                             </>
@@ -46,8 +58,9 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login setToken={setToken} />} />
+                    <Route path="/login" element={<Login setToken={setToken} setUserRole={setUserRole} />} />
                     <Route path="/books" element={token ? <Books token={token} /> : <Navigate to="/login" />} />
+                    <Route path="/upload" element={token && userRole === 'admin' ? <UploadBook token={token} /> : <Navigate to="/login" />} />
                     <Route path="/profile" element={token ? <Profile token={token} handleLogout={handleLogout} /> : <Navigate to="/login" />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
