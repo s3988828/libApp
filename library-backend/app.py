@@ -99,7 +99,7 @@ def request_password_reset():
                        (user['id'], token, expiration_date))
         conn.commit()
 
-        reset_link = f"https://ec2-3-106-206-227.ap-southeast-2.compute.amazonaws.com/api/reset-password?token={token}"
+        reset_link = f"https://ec2-3-27-159-85.ap-southeast-2.compute.amazonaws.com/reset-password?token={token}"
         msg = Message('Password Reset Request', recipients=[email])
         msg.body = f"Hello {user['username']},\n\nTo reset your password, click the following link: {reset_link}\n\nIf you did not request this, please ignore this email."
         mail.send(msg)

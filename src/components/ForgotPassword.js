@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/request-password-reset', { email });
+            const response = await api.post('/api/request-password-reset', { email });
             setMessage(response.data.message);
         } catch (error) {
             if (error.response && error.response.data) {

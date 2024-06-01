@@ -10,7 +10,7 @@ const ResetPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/reset-password', { token, new_password: newPassword });
+            const response = await api.post('/api/reset-password', { token, new_password: newPassword });
             setMessage(response.data.message);
         } catch (error) {
             if (error.response && error.response.data) {

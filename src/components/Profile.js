@@ -8,7 +8,7 @@ const Profile = ({ token, handleLogout }) => {
     useEffect(() => {
         const fetchProfileDetails = async () => {
             try {
-                const response = await api.get('/profile', {
+                const response = await api.get('/api/profile', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setProfileDetails(response.data);

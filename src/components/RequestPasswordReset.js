@@ -9,7 +9,7 @@ const RequestPasswordReset = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/request-password-reset', { username });
+            const response = await api.post('/api/request-password-reset', { username });
             setMessage(`Reset token: ${response.data.token}`);
         } catch (error) {
             if (error.response && error.response.data) {
