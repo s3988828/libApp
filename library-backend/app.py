@@ -128,7 +128,7 @@ def reset_password():
 
     return jsonify({'message': 'Invalid or expired token'}), 400
 
-@app.route('/books', methods=['GET'])
+@app.route('/api/books', methods=['GET'])
 @jwt_required()
 def get_books():
     query = request.args.get('q', '')

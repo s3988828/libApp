@@ -9,7 +9,7 @@ const Books = ({ token }) => {
 
   useEffect(() => {
     const fetchBooks = () => {
-      axios.get('/books', {
+      axios.get('/api/books', {
         headers: { Authorization: `Bearer ${token}` },
         params: { q: search }
       })
