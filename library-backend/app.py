@@ -7,6 +7,7 @@ import sqlite3
 import uuid
 from datetime import datetime, timedelta
 import io
+import boto3
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://ec2-3-106-206-227.ap-southeast-2.compute.amazonaws.com"}})
@@ -139,28 +140,7 @@ def get_books():
     conn.close()
     return jsonify([dict(book) for book in books])
 
-@app.route('/books', methods=['GET'])
-def get_books():
-    query = request.args.get('q', '')
-    conn = get_db_connection()
-    books = conn.execute('SELECT * FROM books WHERE title LIKE ?', (f'%{query}%',)).fetchall()
-    conn.close()
-    return jsonify([dict(book) for book in books])
 
-@app.route('/books/<int:book_id>/download', methods=['GET'])
-def download_book(book_id):
-    conn = get_db_connection()
-    book = conn.execute('SELECT * FROM books WHERE id = ?', (book_id,)).fetchone()
-    conn.close()
-    
-    if book:
-        s3_key = book['s3_key']
-        url = s3_client.generate_presigned_url('get_object',
-                                               Params={'Bucket': 'libsys', 'Key': s3_key},
-                                               ExpiresIn=3600)
-        return jsonify({'url': url})
-    else:
-        return jsonify({'error': 'Book not found'}), 404
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0', port=5000)
