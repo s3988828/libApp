@@ -11,7 +11,8 @@ import boto3
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "https://ec2-3-27-159-85.ap-southeast-2.compute.amazonaws.com"}})
-s3_client = boto3.client('s3', region_name='ap-southeast-2')
+s3_client = boto3.client('s3')
+BUCKET_NAME = 'libsys'
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Ensure this is securely generated and consistent
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 bcrypt = Bcrypt(app)
@@ -152,8 +153,8 @@ def upload_book():
     metadata = request.form
 
     s3_key = f"books/{uuid.uuid4()}/{file.filename}"
-    s3_client.upload_fileobj(file, 'your-bucket-name', s3_key)
-    url = s3_client.generate_presigned_url('get_object', Params={'Bucket': 'your-bucket-name', 'Key': s3_key}, ExpiresIn=3600)
+    s3_client.upload_fileobj(file, 'libsys', s3_key)
+    url = s3_client.generate_presigned_url('get_object', Params={'Bucket': 'libsys', 'Key': s3_key}, ExpiresIn=3600)
 
     conn = get_db_connection()
     cursor = conn.cursor()
