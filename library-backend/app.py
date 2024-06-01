@@ -31,7 +31,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
     username = data['username']
@@ -51,7 +51,7 @@ def register():
 
     return jsonify({'message': 'User registered successfully'}), 201
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
     identifier = data['identifier']
@@ -69,7 +69,7 @@ def login():
 
     return jsonify({'message': 'Invalid credentials'}), 401
 
-@app.route('/profile', methods=['GET'])
+@app.route('/api/profile', methods=['GET'])
 @jwt_required()
 def profile():
     current_user = get_jwt_identity()
@@ -82,7 +82,7 @@ def profile():
         return jsonify(dict(user))
     return jsonify({'message': 'User not found'}), 404
 
-@app.route('/request-password-reset', methods=['POST'])
+@app.route('/api/request-password-reset', methods=['POST'])
 def request_password_reset():
     data = request.json
     email = data['email']
@@ -99,7 +99,7 @@ def request_password_reset():
                        (user['id'], token, expiration_date))
         conn.commit()
 
-        reset_link = f"http://3.27.30.178:5000/reset-password?token={token}"
+        reset_link = f"https://ec2-3-106-206-227.ap-southeast-2.compute.amazonaws.com/api/reset-password?token={token}"
         msg = Message('Password Reset Request', recipients=[email])
         msg.body = f"Hello {user['username']},\n\nTo reset your password, click the following link: {reset_link}\n\nIf you did not request this, please ignore this email."
         mail.send(msg)
@@ -108,7 +108,7 @@ def request_password_reset():
 
     return jsonify({'message': 'Email not found'}), 404
 
-@app.route('/reset-password', methods=['POST'])
+@app.route('/api/reset-password', methods=['POST'])
 def reset_password():
     data = request.json
     token = data['token']
