@@ -10,7 +10,7 @@ import io
 import boto3
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://ec2-3-106-206-227.ap-southeast-2.compute.amazonaws.com"}})
+CORS(app, resources={r"/api/*": {"origins": "https://ec2-3-106-206-227.ap-southeast-2.compute.amazonaws.com"}})
 s3_client = boto3.client('s3', region_name='ap-southeast-2')
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Ensure this is securely generated and consistent
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
@@ -143,5 +143,5 @@ def get_books():
 
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=5000)
+     app.run()
      
