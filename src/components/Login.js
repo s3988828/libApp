@@ -11,7 +11,7 @@ const Login = ({ setToken }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/login', { identifier, password });
+            const response = await api.post('/api/login', { identifier, password });
             const token = response.data.access_token;
             localStorage.setItem('token', token);  // Store token in local storage
             setToken(token);
