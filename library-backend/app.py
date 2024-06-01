@@ -10,9 +10,10 @@ import io
 import boto3
 
 
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "https://ec2-3-27-159-85.ap-southeast-2.compute.amazonaws.com"}})
-s3_client = boto3.client('s3')
+s3_client = boto3.client('s3', region_name='Asia Pacific (Sydney) ap-southeast-2')
 BUCKET_NAME = 'libsys'
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Ensure this is securely generated and consistent
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
@@ -140,7 +141,20 @@ def get_books():
                    (f'%{query}%', f'%{query}%', f'%{query}%'))
     books = cursor.fetchall()
     conn.close()
-    return jsonify([dict(book) for book in books])
+    
+    book_data = []
+    for book in books:
+        url = s3_client.generate_presigned_url('get_object', Params={'Bucket': 'libsys', 'Key': book['url']}, ExpiresIn=3600)
+        book_data.append({
+            'id': book['id'],
+            'title': book['title'],
+            'author': book['author'],
+            'genre': book['genre'],
+            'published_date': book['published_date'],
+            'url': url
+        })
+    
+    return jsonify(book_data)
 
 
 @app.route('/api/books', methods=['POST'])
